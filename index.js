@@ -5,7 +5,6 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 
 const client = new MongoClient(
   "mongodb+srv://raihan:iKeEZyWrdCzvu8UY@cluster0.dyuhm.mongodb.net/ecommerce?retryWrites=true&w=majority"
@@ -15,7 +14,6 @@ app.use("/uploads", express.static(path.join(__dirname, "product-image")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000/" }));
 app.use(express.static(path.join(__dirname, "build")));
 
 app.listen(5000, function () {
