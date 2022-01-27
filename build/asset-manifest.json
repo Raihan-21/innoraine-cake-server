@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.bb45566f.chunk.css",
+    "main.js": "/static/js/main.ce674de5.chunk.js",
+    "main.js.map": "/static/js/main.ce674de5.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.6f7d55f4.js",
+    "runtime-main.js.map": "/static/js/runtime-main.6f7d55f4.js.map",
+    "static/js/2.f65d82bf.chunk.js": "/static/js/2.f65d82bf.chunk.js",
+    "static/js/2.f65d82bf.chunk.js.map": "/static/js/2.f65d82bf.chunk.js.map",
+    "static/js/3.593e43b3.chunk.js": "/static/js/3.593e43b3.chunk.js",
+    "static/js/3.593e43b3.chunk.js.map": "/static/js/3.593e43b3.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.bb45566f.chunk.css.map": "/static/css/main.bb45566f.chunk.css.map",
+    "static/js/2.f65d82bf.chunk.js.LICENSE.txt": "/static/js/2.f65d82bf.chunk.js.LICENSE.txt",
+    "static/media/pexels-ronmar-lacamiento-806363.5c2d7dd2.jpg": "/static/media/pexels-ronmar-lacamiento-806363.5c2d7dd2.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6f7d55f4.js",
+    "static/js/2.f65d82bf.chunk.js",
+    "static/css/main.bb45566f.chunk.css",
+    "static/js/main.ce674de5.chunk.js"
+  ]
+}
