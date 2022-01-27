@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
-app.listen(5000, function () {
+app.listen(process.env.PORT || 5000, function () {
   console.log("server running");
 });
 const connect = async () => {
