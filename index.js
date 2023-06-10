@@ -28,6 +28,7 @@ app.listen(process.env.PORT || 5000, function () {
 });
 
 app.use("/api/admin", cmsRouter);
+app.use("/api", mainRouter);
 // app.use("/api/admin", mainMiddleware, mainRouter);
 // const connect = async () => {
 //   try {

@@ -6,23 +6,15 @@ const { config } = require("../configs/database");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const ProductController = require("../controllers/products");
+
+const productService = new ProductController();
 
 const pool = new Pool({
   connectionString:
     "postgresql://postgres:Vh4zNM3jbRVKafx4YINE@containers-us-west-11.railway.app:6146/railway",
 });
 // pool.connect();
-
-router.get("/products", async (req, res) => {
-  try {
-    const query = await pool.query(
-      "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id"
-    );
-    res.json({ body: query.rows });
-  } catch (error) {
-    res.json({ error });
-  }
-});
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -54,5 +46,14 @@ router.get("/categories", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+/**
+ *
+ *  =============== Products Services ===============
+ *
+ */
+
+router.get("/products", productService.getItems);
+router.get("/products/:id", productService.getDetail);
 
 module.exports.mainRouter = router;

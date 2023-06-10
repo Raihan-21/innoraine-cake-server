@@ -8,16 +8,21 @@ const jwt = require("jsonwebtoken");
 const adminPool = require("../database/admin");
 const protectedMiddleware = require("../middlewares/protected");
 
-router.get("/products", async (req, res) => {
-  try {
-    const queryString =
-      "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id";
-    const query = await adminPool.query(queryString);
-    res.json({ body: query.rows });
-  } catch (error) {
-    res.json({ error });
-  }
-});
+const ProductController = require("../controllers/products");
+const UserController = require("../controllers/users");
+
+/**
+ *  ========= CONTROLLER INSTANCE =========
+ */
+
+const productController = new ProductController();
+const userController = new UserController();
+
+/**
+ *
+ *     ========= ROUTES ==========
+ *
+ */
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -49,26 +54,22 @@ router.get("/categories", async (req, res) => {
   }
 });
 
-router.post("/products", protectedMiddleware, async (req, res) => {
-  const queryString =
-    "INSERT INTO produk(nama_produk, id_kategori, deskripsi, harga, stok) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-  const values = Object.values(req.body).map((value) => value);
-  try {
-    const query = await adminPool.query(queryString, values);
-    res.json({ body: query.rows[0] });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-router.delete("/products/:id", async (req, res) => {
-  const queryString = "DELETE FROM produk WHERE id = $1";
-  const values = [req.params.id];
-  try {
-    const query = await adminPool.query(queryString, values);
-    res.json({ body: query });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+/**
+ *
+ *    ========== USERS SERVICES ===========
+ *
+ */
+
+router.get("/users", userController.getUsers);
+
+/**
+ *
+ *    ========== PROTECTED PRODUCTS SERVICES ===========
+ *
+ */
+
+router.get("/products", productController.getItems);
+router.post("/products", protectedMiddleware, productController.postItem);
+router.delete("/products/:id", productController.deleteItem);
 
 module.exports.cmsRouter = router;
