@@ -1,4 +1,5 @@
 const adminPool = require("../database/admin");
+const { sqlConditionGenerator } = require("../helpers/helpers");
 
 class ProductController {
   constructor() {}
@@ -12,10 +13,16 @@ class ProductController {
    */
 
   async getItems(req, res) {
+    const { id_kategori } = req.query;
+    const query = {
+      "produk.id_kategori": id_kategori,
+    };
+    const { queryCondition, queryValues } = sqlConditionGenerator(query);
     try {
       const queryString =
-        "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id";
-      const query = await adminPool.query(queryString);
+        "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id " +
+        queryCondition;
+      const query = await adminPool.query(queryString, queryValues);
       res.json({ body: query.rows });
     } catch (error) {
       res.json({ error });
