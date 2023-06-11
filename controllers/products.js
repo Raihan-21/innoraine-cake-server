@@ -18,6 +18,7 @@ class ProductController {
       "produk.id_kategori": id_kategori,
     };
     const { queryCondition, queryValues } = sqlConditionGenerator(query);
+    // console.log(queryCondition, queryValues);
     try {
       const queryString =
         "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id " +
