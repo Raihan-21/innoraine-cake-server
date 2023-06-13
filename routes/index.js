@@ -55,5 +55,6 @@ router.get("/categories", async (req, res) => {
 
 router.get("/products", productService.getItems);
 router.get("/products/:id", productService.getDetail);
+router.get("/products/gallery/:id", productService.getProductImages);
 
 module.exports.mainRouter = router;

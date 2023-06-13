@@ -34,13 +34,24 @@ class ProductController {
     const { id } = req.params;
     try {
       const queryString =
-        "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id WHERE produk.id = $1";
+        "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.id = $1";
       const values = [id];
       const query = await adminPool.query(queryString, values);
       res.json({ body: query.rows[0] });
     } catch (error) {
       res.status(500).json({ error });
       throw error;
+    }
+  }
+  async getProductImages(req, res) {
+    const { id } = req.params;
+    const queryString = "SELECT * from gambar_produk WHERE id_produk = $1";
+    const values = [id];
+    try {
+      const query = await adminPool.query(queryString, values);
+      res.json({ body: query.rows });
+    } catch (error) {
+      res.status(500).json({ error });
     }
   }
 
