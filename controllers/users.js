@@ -19,6 +19,17 @@ class UserController {
       res.status(500).send(error.message);
     }
   }
+
+  async findUser(email) {
+    const queryString = "SELECT * FROM users WHERE email = $1";
+    const values = [email];
+    try {
+      const query = await adminPool.query(queryString, values);
+      return query.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = UserController;
