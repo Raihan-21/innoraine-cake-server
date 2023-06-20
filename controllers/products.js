@@ -13,17 +13,25 @@ class ProductController {
    */
 
   async getItems(req, res) {
-    const { id_kategori } = req.query;
+    const { id_kategori, search } = req.query;
     const query = {
       "produk.id_kategori": id_kategori,
     };
-    const { queryCondition, queryValues } = sqlConditionGenerator(query);
-    // console.log(queryCondition, queryValues);
+    const searchQuery = {
+      "produk.nama_produk": search,
+    };
+    // const searchValue = search;
+    const { queryCondition, queryValues } = sqlConditionGenerator(
+      query,
+      searchQuery
+    );
     try {
       const queryString =
         "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id " +
         queryCondition;
+      // console.log(queryString);
       const query = await adminPool.query(queryString, queryValues);
+
       res.json({ body: query.rows });
     } catch (error) {
       res.json({ error });

@@ -22,7 +22,8 @@ class Auth {
       );
       if (!authenticated) throw new Error("Password salah!");
       const token = await jwt.sign(email, "innorainetoken");
-      res.json({ token, body: query.rows[0] });
+      const { password: userPass, ...user } = query.rows[0];
+      res.json({ token, body: user });
     } catch (error) {
       res.status(401).send(error.message);
     }
