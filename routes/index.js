@@ -7,7 +7,9 @@ const { config } = require("../configs/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ProductController = require("../controllers/products");
+const UserController = require("../controllers/users");
 const authService = require("../controllers/auth");
+const userService = new UserController();
 
 const productService = new ProductController();
 
@@ -37,5 +39,12 @@ router.get("/categories", async (req, res) => {
 router.get("/products", productService.getItems);
 router.get("/products/:id", productService.getDetail);
 router.get("/products/gallery/:id", productService.getProductImages);
+
+/**
+ *
+ * =============== Cart Services ==================
+ *
+ */
+router.post("/cart", userService.addItemToCart);
 
 module.exports.mainRouter = router;

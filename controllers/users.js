@@ -1,5 +1,8 @@
+const ProductController = require("./products");
+
 const adminPool = require("../database/admin");
 
+const productService = new ProductController();
 class UserController {
   constructor() {}
 
@@ -28,6 +31,30 @@ class UserController {
       return query.rows[0];
     } catch (error) {
       throw error;
+    }
+  }
+  async addItemToCart(req, res) {
+    const client = await adminPool.connect();
+
+    const { id_user, id_produk, jumlah, harga } = req.body;
+    try {
+      await client.query("BEGIN");
+      const updateQuery = await productService.updateItem(
+        client,
+        id_produk,
+        jumlah
+      );
+      const queryString =
+        "INSERT INTO keranjang(id_user, id_produk, jumlah, harga) VALUES($1, $2, $3, $4) RETURNING *";
+      const queryValues = [id_user, id_produk, jumlah, harga];
+      const query = await client.query(queryString, queryValues);
+      await client.query("COMMIT");
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      await client.query("ROLLBACK");
+      res.status(500).json({ error });
+    } finally {
+      client.release();
     }
   }
 }

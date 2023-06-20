@@ -82,6 +82,17 @@ class ProductController {
     }
   }
 
+  async updateItem(client, id, jumlah) {
+    const queryString = "UPDATE produk SET stok = stok - $1 WHERE id = $2";
+    const queryValues = [jumlah, id];
+    try {
+      const res = await client.query(queryString, queryValues);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /**
    * DELETE PRODUCT
    *
