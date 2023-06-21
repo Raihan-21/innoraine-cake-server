@@ -64,7 +64,11 @@ class UserController {
         "SELECT keranjang.*, row_to_json(produk) as produk, row_to_json(kategori) as kategori FROM keranjang JOIN produk ON keranjang.id_produk = produk.id JOIN kategori ON produk.id_kategori = kategori.id WHERE keranjang.id_user = $1";
       const queryValues = [id_user];
       const query = await adminPool.query(queryString, queryValues);
-      res.json({ body: query.rows });
+      const totalHarga = query.rows.reduce(
+        (accumulator, currValue) => accumulator + currValue.harga,
+        0
+      );
+      res.json({ body: { data: query.rows, total_harga: totalHarga } });
     } catch (error) {
       res.json({ error });
     }
