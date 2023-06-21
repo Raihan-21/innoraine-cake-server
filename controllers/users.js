@@ -61,7 +61,7 @@ class UserController {
     const { id_user } = req.params;
     try {
       const queryString =
-        "SELECT keranjang.*, row_to_json(produk) as produk FROM keranjang JOIN produk ON keranjang.id_produk = produk.id WHERE keranjang.id_user = $1";
+        "SELECT keranjang.*, row_to_json(produk) as produk, row_to_json(kategori) as kategori FROM keranjang JOIN produk ON keranjang.id_produk = produk.id JOIN kategori ON produk.id_kategori = kategori.id WHERE keranjang.id_user = $1";
       const queryValues = [id_user];
       const query = await adminPool.query(queryString, queryValues);
       res.json({ body: query.rows });
