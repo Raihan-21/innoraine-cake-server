@@ -45,6 +45,7 @@ router.get("/products/gallery/:id", productService.getProductImages);
  * =============== Cart Services ==================
  *
  */
+router.get("/cart/:id_user", userService.getCart);
 router.post("/cart", userService.addItemToCart);
 
 module.exports.mainRouter = router;
