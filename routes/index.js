@@ -6,12 +6,13 @@ const { config } = require("../configs/database");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const ProductController = require("../controllers/products");
-const UserController = require("../controllers/users");
-const authService = require("../controllers/auth");
-const userService = new UserController();
 
-const productService = new ProductController();
+const productService = require("../controllers/products");
+const userService = require("../controllers/users");
+const authService = require("../controllers/auth");
+// const userService = new UserController();
+
+// const productService = new ProductController();
 
 const pool = new Pool({
   connectionString:

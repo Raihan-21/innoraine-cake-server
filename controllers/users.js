@@ -1,8 +1,8 @@
-const ProductController = require("./products");
+const productService = require("./products");
 
 const adminPool = require("../database/admin");
 
-const productService = new ProductController();
+// const productService = new ProductController();
 class UserController {
   constructor() {}
 
@@ -75,4 +75,6 @@ class UserController {
   }
 }
 
-module.exports = UserController;
+const userService = new UserController();
+
+module.exports = userService;
