@@ -8,15 +8,15 @@ const jwt = require("jsonwebtoken");
 const adminPool = require("../database/admin");
 const protectedMiddleware = require("../middlewares/protected");
 
-const ProductController = require("../controllers/products");
-const UserController = require("../controllers/users");
+const productService = require("../controllers/products");
+const userService = require("../controllers/users");
 
 /**
  *  ========= CONTROLLER INSTANCE =========
  */
 
-const productController = new ProductController();
-const userController = new UserController();
+// const productController = new ProductController();
+// const userController = new UserController();
 
 /**
  *
@@ -60,7 +60,7 @@ router.get("/categories", async (req, res) => {
  *
  */
 
-router.get("/users", userController.getUsers);
+router.get("/users", userService.getUsers);
 
 /**
  *
@@ -68,8 +68,8 @@ router.get("/users", userController.getUsers);
  *
  */
 
-router.get("/products", productController.getItems);
-router.post("/products", protectedMiddleware, productController.postItem);
-router.delete("/products/:id", productController.deleteItem);
+router.get("/products", productService.getItems);
+router.post("/products", protectedMiddleware, productService.postItem);
+router.delete("/products/:id", productService.deleteItem);
 
 module.exports.cmsRouter = router;

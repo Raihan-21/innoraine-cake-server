@@ -2,8 +2,9 @@ const adminPool = require("../database/admin");
 const { sqlConditionGenerator } = require("../helpers/helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UserController = require("./users");
-const userService = new UserController();
+
+const userService = require("./users");
+// const userService = new UserController();
 
 class Auth {
   async login(req, res) {

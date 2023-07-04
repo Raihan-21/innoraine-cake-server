@@ -113,4 +113,5 @@ class ProductController {
   }
 }
 
-module.exports = ProductController;
+const productService = new ProductController();
+module.exports = productService;
