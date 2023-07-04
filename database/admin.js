@@ -1,7 +1,8 @@
+require("dotenv").config();
 const { Pool } = require("pg");
 
+// console.log(process.env.DB_URI);
 const adminPool = new Pool({
-  connectionString:
-    "postgresql://postgres:Vh4zNM3jbRVKafx4YINE@containers-us-west-11.railway.app:6146/railway",
+  connectionString: process.env.DB_URI,
 });
 module.exports = adminPool;
