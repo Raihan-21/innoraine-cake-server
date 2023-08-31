@@ -1,6 +1,6 @@
 const productService = require("./products");
 
-const adminPool = require("../database/admin");
+const { adminPool } = require("../database/admin");
 
 // const productService = new ProductController();
 class UserController {
@@ -65,7 +65,7 @@ class UserController {
       const queryValues = [id_user];
       const query = await adminPool.query(queryString, queryValues);
       const totalHarga = query.rows.reduce(
-        (accumulator, currValue) => accumulator + currValue.harga,
+        (accumulator, currValue) => accumulator + Number(currValue.harga),
         0
       );
       res.json({ body: { data: query.rows, total_harga: totalHarga } });

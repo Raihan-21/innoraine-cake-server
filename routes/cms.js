@@ -5,7 +5,7 @@ const { config } = require("../configs/database");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const adminPool = require("../database/admin");
+const { adminPool } = require("../database/admin");
 const protectedMiddleware = require("../middlewares/protected");
 
 const productService = require("../controllers/products");
@@ -71,5 +71,9 @@ router.get("/users", userService.getUsers);
 router.get("/products", productService.getItems);
 router.post("/products", protectedMiddleware, productService.postItem);
 router.delete("/products/:id", productService.deleteItem);
+
+router.get("/v2/products", productService.supabaseGetItems);
+router.post("/v2/products", protectedMiddleware, productService.postItem);
+router.delete("/v2/products/:id", productService.deleteItem);
 
 module.exports.cmsRouter = router;

@@ -20,13 +20,14 @@ const pool = new Pool({
 });
 // pool.connect();
 
-router.post("/login", authService.login);
+router.post("/login", authService.userLogin);
 
 router.get("/categories", async (req, res) => {
   try {
     const query = await pool.query("SELECT * FROM kategori");
     res.json({ body: query.rows });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error.message);
   }
 });
@@ -40,6 +41,10 @@ router.get("/categories", async (req, res) => {
 router.get("/products", productService.getItems);
 router.get("/products/:id", productService.getDetail);
 router.get("/products/gallery/:id", productService.getProductImages);
+
+router.get("/v2/products", productService.supabaseGetItems);
+router.get("/v2/products/:id", productService.getDetail);
+router.get("/v2/products/gallery/:id", productService.getProductImages);
 
 /**
  *

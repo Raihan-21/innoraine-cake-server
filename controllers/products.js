@@ -1,5 +1,6 @@
-const adminPool = require("../database/admin");
+const { adminPool, supabase } = require("../database/admin");
 const { sqlConditionGenerator } = require("../helpers/helpers");
+// const {supabase} = require('../database/admin')
 
 class ProductController {
   constructor() {}
@@ -13,7 +14,7 @@ class ProductController {
    */
 
   async getItems(req, res) {
-    const { id_kategori, search } = req.query;
+    const { id_kategori, search, orderby, sort } = req.query;
     const query = {
       "produk.id_kategori": id_kategori,
     };
@@ -21,23 +22,40 @@ class ProductController {
       "produk.nama_produk": search,
     };
     // const searchValue = search;
+    const order = {
+      by: orderby ? orderby : "created_at",
+      sort: sort ? sort : "asc",
+    };
     const { queryCondition, queryValues } = sqlConditionGenerator(
       query,
-      searchQuery
+      searchQuery,
+      order
     );
+
     try {
       const queryString =
         "SELECT produk.*, row_to_json(kategori) as kategori FROM produk JOIN kategori ON produk.id_kategori = kategori.id " +
         queryCondition;
       // console.log(queryString);
       const query = await adminPool.query(queryString, queryValues);
-
       res.json({ body: query.rows });
     } catch (error) {
+      console.log(error);
       res.json({ error });
     }
   }
-
+  async supabaseGetItems(req, res) {
+    try {
+      const { data, error } = await supabase
+        .from("produk")
+        .select(`*, kategori(*)`);
+      console.log(error);
+      if (error) throw new Error(error);
+      res.json({ body: data });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
   async getDetail(req, res) {
     const { id } = req.params;
     try {
@@ -45,6 +63,7 @@ class ProductController {
         "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.id = $1";
       const values = [id];
       const query = await adminPool.query(queryString, values);
+      console.log(query);
       res.json({ body: query.rows[0] });
     } catch (error) {
       res.status(500).json({ error });

@@ -1,4 +1,4 @@
-const adminPool = require("../database/admin");
+const { adminPool } = require("../database/admin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 

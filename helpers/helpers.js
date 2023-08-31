@@ -1,4 +1,11 @@
-const sqlConditionGenerator = (queryObject, searchObject) => {
+const sqlConditionGenerator = (
+  queryObject,
+  searchObject,
+  orderObject = {
+    by: "created_at",
+    sort: "asc",
+  }
+) => {
   let queryCondition = "";
   let queryValues = [];
   const validQuery = Object.keys(queryObject).filter(
@@ -27,6 +34,7 @@ const sqlConditionGenerator = (queryObject, searchObject) => {
       queryValues.push(searchObject[query]);
     });
   }
+  queryCondition += "ORDER BY " + orderObject.by + " " + orderObject.sort;
   return { queryCondition, queryValues };
 };
 
