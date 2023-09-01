@@ -27,7 +27,6 @@ router.get("/categories", async (req, res) => {
     const query = await pool.query("SELECT * FROM kategori");
     res.json({ body: query.rows });
   } catch (error) {
-    console.log(error);
     res.status(500).send(error.message);
   }
 });
