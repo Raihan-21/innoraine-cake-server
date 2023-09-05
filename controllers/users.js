@@ -52,9 +52,35 @@ class UserController {
       res.json({ body: query.rows[0] });
     } catch (error) {
       await client.query("ROLLBACK");
+      console.log(error);
       res.status(500).json({ error });
     } finally {
       client.release();
+    }
+  }
+  async updateCartItem(req, res) {
+    const client = await adminPool.connect();
+    const { id_user, id_produk, operation } = req.body;
+    const operator = operation === "increment" ? "+" : "-";
+    try {
+      const productQueryString =
+        "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.id = $1";
+      const productValues = [id_produk];
+      const productQuery = await adminPool.query(
+        productQueryString,
+        productValues
+      );
+      await client.query("BEGIN");
+      await productService.updateItem(client, id_produk, 1);
+      const queryString = `UPDATE keranjang SET jumlah = jumlah ${operator} 1, harga = harga ${operator} $1 WHERE id_produk = $2 AND id_user = $3 RETURNING *`;
+      const queryValues = [productQuery.rows[0].harga, id_produk, id_user];
+      const query = await adminPool.query(queryString, queryValues);
+      await client.query("COMMIT");
+      console.log(query);
+      res.json({ body: query });
+    } catch (error) {
+      await client.query("ROLLBACK");
+      console.log(error);
     }
   }
   async getCart(req, res) {

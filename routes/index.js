@@ -52,5 +52,6 @@ router.get("/v2/products/gallery/:id", productService.getProductImages);
  */
 router.get("/cart/:id_user", userService.getCart);
 router.post("/cart", userService.addItemToCart);
+router.put("/cart", userService.updateCartItem);
 
 module.exports.mainRouter = router;

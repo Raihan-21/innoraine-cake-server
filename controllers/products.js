@@ -63,7 +63,7 @@ class ProductController {
         "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.id = $1";
       const values = [id];
       const query = await adminPool.query(queryString, values);
-      console.log(query);
+      // console.log(query);
       res.json({ body: query.rows[0] });
     } catch (error) {
       res.status(500).json({ error });
@@ -101,8 +101,9 @@ class ProductController {
     }
   }
 
-  async updateItem(client, id, jumlah) {
-    const queryString = "UPDATE produk SET stok = stok - $1 WHERE id = $2";
+  async updateItem(client, id, jumlah, operation = "decrement") {
+    const operator = operation === "increment" ? "+" : "-";
+    const queryString = `UPDATE produk SET jumlah = jumlah ${operator} $1 WHERE id = $2`;
     const queryValues = [jumlah, id];
     try {
       const res = await client.query(queryString, queryValues);
