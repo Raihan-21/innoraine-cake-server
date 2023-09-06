@@ -44,15 +44,26 @@ class UserController {
         id_produk,
         jumlah
       );
-      const queryString =
-        "INSERT INTO keranjang(id_user, id_produk, jumlah, harga) VALUES($1, $2, $3, $4) RETURNING *";
-      const queryValues = [id_user, id_produk, jumlah, harga];
-      const query = await client.query(queryString, queryValues);
+      let query = "";
+      const findQueryString =
+        "SELECT * FROM keranjang WHERE id_user = $1 AND id_produk = $2";
+      const findQueryValues = [id_user, id_produk];
+      const findQuery = await client.query(findQueryString, findQueryValues);
+      if (!findQuery.rowCount) {
+        const queryString =
+          "INSERT INTO keranjang(id_user, id_produk, jumlah, harga) VALUES($1, $2, $3, $4) RETURNING *";
+        const queryValues = [id_user, id_produk, jumlah, harga];
+        query = await client.query(queryString, queryValues);
+      } else {
+        const queryString =
+          "UPDATE keranjang SET jumlah = jumlah + $1, harga = harga + $2 WHERE id_user = $3 AND id_produk = $4 RETURNING *";
+        const queryValues = [jumlah, harga, id_user, id_produk];
+        query = await client.query(queryString, queryValues);
+      }
       await client.query("COMMIT");
       res.json({ body: query.rows[0] });
     } catch (error) {
       await client.query("ROLLBACK");
-      console.log(error);
       res.status(500).json({ error });
     } finally {
       client.release();
