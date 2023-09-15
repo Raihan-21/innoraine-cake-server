@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const productService = require("../controllers/products");
 const userService = require("../controllers/users");
 const authService = require("../controllers/auth");
+const orderService = require("../controllers/order");
 // const userService = new UserController();
 
 // const productService = new ProductController();
@@ -53,5 +54,7 @@ router.get("/v2/products/gallery/:id", productService.getProductImages);
 router.get("/cart/:id_user", userService.getCart);
 router.post("/cart", userService.addItemToCart);
 router.put("/cart", userService.updateCartItem);
+
+router.post("/order", orderService.postOrder);
 
 module.exports.mainRouter = router;
