@@ -56,5 +56,6 @@ router.post("/cart", userService.addItemToCart);
 router.put("/cart", userService.updateCartItem);
 
 router.post("/order", orderService.postOrder);
+router.get("/order", orderService.getOrders);
 
 module.exports.mainRouter = router;
