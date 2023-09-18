@@ -10,6 +10,7 @@ const protectedMiddleware = require("../middlewares/protected");
 
 const productService = require("../controllers/products");
 const userService = require("../controllers/users");
+const orderService = require("../controllers/order");
 
 /**
  *  ========= CONTROLLER INSTANCE =========
@@ -71,6 +72,8 @@ router.get("/users", userService.getUsers);
 router.get("/products", productService.getItems);
 router.post("/products", protectedMiddleware, productService.postItem);
 router.delete("/products/:id", productService.deleteItem);
+
+router.get("/orders", orderService.getOrders);
 
 router.get("/v2/products", productService.supabaseGetItems);
 router.post("/v2/products", protectedMiddleware, productService.postItem);
