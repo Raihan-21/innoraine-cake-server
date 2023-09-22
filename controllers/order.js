@@ -6,9 +6,13 @@ class OrderController {
     const client = await adminPool.connect();
     try {
       await client.query("BEGIN");
+      let total_harga = 0;
+      items.forEach((item) => {
+        total_harga += item.harga * item.jumlah;
+      });
       const addOrder = await client.query(
-        "INSERT INTO orders(id_user, nama, no_telp, alamat, status) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [id_user, nama, no_telp, alamat, "pending"]
+        "INSERT INTO orders(id_user, nama, no_telp, alamat, total_harga, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        [id_user, nama, no_telp, alamat, total_harga, "pending"]
       );
       // console.log(addOrder);
       for (const item of items) {
@@ -34,9 +38,10 @@ class OrderController {
         );
       }
       await client.query("COMMIT");
+      res.json({ body: { message: "success" } });
     } catch (error) {
       await client.query("ROLLBACK");
-      throw error;
+      res.status(500).json({ error });
     }
     // const {}
     // try {
