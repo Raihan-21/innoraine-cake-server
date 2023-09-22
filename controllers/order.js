@@ -94,6 +94,31 @@ class OrderController {
       res.status(500).json({ error });
     }
   }
+  async toggleOrder(req, res) {
+    const { id, confirm } = req.body;
+    const status = confirm === 1 ? "paid" : "pending";
+    try {
+      const queryString =
+        "UPDATE orders SET status = $1 WHERE id = $2 RETURNING *";
+      const queryValues = [status, id];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  }
+  async deletOrder(req, res) {
+    const { id } = req.params;
+    try {
+      const queryString = "DELETE FROM orders WHERE id = $1 RETURNING *";
+      const queryValues = [id];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      res.json({ error });
+    }
+  }
 }
 
 const orderService = new OrderController();

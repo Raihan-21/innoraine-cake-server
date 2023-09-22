@@ -59,4 +59,5 @@ router.post("/order", orderService.postOrder);
 router.get("/order", orderService.getOrder);
 router.get("/order/:id", orderService.getOrderDetail);
 
+router.get("/user/profile/:id", userService.getUserProfile);
 module.exports.mainRouter = router;

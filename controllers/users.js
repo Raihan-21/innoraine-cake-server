@@ -33,6 +33,18 @@ class UserController {
       throw error;
     }
   }
+  async getUserProfile(req, res) {
+    const { id } = req.params;
+    try {
+      const queryString =
+        "SELECT nama, email, alamat, no_telp FROM users WHERE id = $1";
+      const queryValues = [id];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
   async addItemToCart(req, res) {
     const client = await adminPool.connect();
 

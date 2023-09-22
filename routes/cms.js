@@ -74,6 +74,8 @@ router.post("/products", protectedMiddleware, productService.postItem);
 router.delete("/products/:id", productService.deleteItem);
 
 router.get("/orders", orderService.getOrders);
+router.post("/orders/toggle", orderService.toggleOrder);
+router.delete("/orders/:id", orderService.deletOrder);
 
 router.get("/v2/products", productService.supabaseGetItems);
 router.post("/v2/products", protectedMiddleware, productService.postItem);

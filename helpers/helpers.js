@@ -4,7 +4,8 @@ const sqlConditionGenerator = (
   orderObject = {
     by: "created_at",
     sort: "asc",
-  }
+  },
+  addOns
 ) => {
   let queryCondition = "";
   let queryValues = [];
