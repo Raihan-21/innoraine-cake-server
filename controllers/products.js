@@ -14,7 +14,7 @@ class ProductController {
    */
 
   async getItems(req, res) {
-    const { id_kategori, search, orderby, sort } = req.query;
+    const { id_kategori, search, orderby, sort, limit } = req.query;
     const query = {
       "produk.id_kategori": id_kategori,
     };
@@ -29,7 +29,8 @@ class ProductController {
     const { queryCondition, queryValues } = sqlConditionGenerator(
       query,
       searchQuery,
-      order
+      order,
+      limit
     );
 
     try {

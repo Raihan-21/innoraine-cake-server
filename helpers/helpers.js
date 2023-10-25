@@ -5,7 +5,7 @@ const sqlConditionGenerator = (
     by: "created_at",
     sort: "asc",
   },
-  addOns
+  limit = null
 ) => {
   let queryCondition = "";
   let queryValues = [];
@@ -36,6 +36,10 @@ const sqlConditionGenerator = (
     });
   }
   queryCondition += "ORDER BY " + orderObject.by + " " + orderObject.sort;
+  if (limit) {
+    queryCondition += " LIMIT " + limit;
+  }
+  console.log(queryCondition);
   return { queryCondition, queryValues };
 };
 

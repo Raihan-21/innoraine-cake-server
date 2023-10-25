@@ -8,18 +8,20 @@ class OrderController {
       await client.query("BEGIN");
       let total_harga = 0;
       items.forEach((item) => {
-        total_harga += item.harga * item.jumlah;
+        // console.log(item.harga);
+        // console.log(item.jumlah);
+        total_harga += Number(item.harga) * Number(item.jumlah);
       });
       const addOrder = await client.query(
         "INSERT INTO orders(id_user, nama, no_telp, alamat, total_harga, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
         [id_user, nama, no_telp, alamat, total_harga, "pending"]
       );
-      // console.log(addOrder);
+      console.log(addOrder);
       for (const item of items) {
         // try {
         const cartRes = await client.query(
           "SELECT * FROM keranjang WHERE id = $1",
-          [item]
+          [item.id]
         );
         const cartItem = cartRes.rows[0];
         const values = [
@@ -38,7 +40,7 @@ class OrderController {
         );
       }
       await client.query("COMMIT");
-      res.json({ body: { message: "success" } });
+      res.json({ body: { message: "success", data: addOrder.rows[0] } });
     } catch (error) {
       await client.query("ROLLBACK");
       res.status(500).json({ error });
@@ -61,7 +63,6 @@ class OrderController {
       const query = await adminPool.query(queryString, queryValues);
       res.json({ body: query.rows });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error });
     }
   }
