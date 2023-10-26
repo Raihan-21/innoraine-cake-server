@@ -106,6 +106,16 @@ class UserController {
       console.log(error);
     }
   }
+  async deleteCartItem() {
+    const { id_user, id_produk } = req.params;
+    // const client =
+    try {
+      const queryString =
+        "DELETE FROM keranjang WHERE id_produk = $1 RETURNING *";
+      const queryValues = [id_produk];
+      // const query = await adminPool.query("UPDATE produk SET jumlah = jumlah + $1 WHERE ");
+    } catch (error) {}
+  }
   async getCart(req, res) {
     const { id_user } = req.params;
     try {
@@ -120,6 +130,17 @@ class UserController {
       res.json({ body: { data: query.rows, total_harga: totalHarga } });
     } catch (error) {
       res.json({ error });
+    }
+  }
+  async getCartTotalItems(req, res) {
+    const { id_user } = req.params;
+    try {
+      const queryString = "SELECT COUNT(*) FROM keranjang WHERE id_user = $1";
+      const queryValues = [id_user];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      res.status(500).json({ error });
     }
   }
 }

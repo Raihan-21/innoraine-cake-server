@@ -52,6 +52,7 @@ router.get("/v2/products/gallery/:id", productService.getProductImages);
  *
  */
 router.get("/cart/:id_user", userService.getCart);
+router.get("/cart/total/:id_user", userService.getCartTotalItems);
 router.post("/cart", userService.addItemToCart);
 router.put("/cart", userService.updateCartItem);
 
