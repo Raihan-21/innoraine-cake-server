@@ -55,6 +55,7 @@ router.get("/cart/:id_user", userService.getCart);
 router.get("/cart/total/:id_user", userService.getCartTotalItems);
 router.post("/cart", userService.addItemToCart);
 router.put("/cart", userService.updateCartItem);
+router.delete("/cart/:userid/:id", userService.deleteCartItem);
 
 router.post("/order", orderService.postOrder);
 router.get("/order", orderService.getOrder);

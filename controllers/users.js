@@ -106,15 +106,28 @@ class UserController {
       console.log(error);
     }
   }
-  async deleteCartItem() {
-    const { id_user, id_produk } = req.params;
+  async deleteCartItem(req, res) {
+    const client = await adminPool.connect();
+    const { userid, id } = req.params;
     // const client =
     try {
-      const queryString =
+      await client.query("BEGIN");
+      const deleteQueryString =
         "DELETE FROM keranjang WHERE id_produk = $1 RETURNING *";
-      const queryValues = [id_produk];
-      // const query = await adminPool.query("UPDATE produk SET jumlah = jumlah + $1 WHERE ");
-    } catch (error) {}
+      const deleteQueryValues = [id];
+      const deleteQuery = await client.query(
+        deleteQueryString,
+        deleteQueryValues
+      );
+      // const query = await adminPool.query(
+      //   "UPDATE produk SET jumlah = jumlah + $1 WHERE "
+      // );
+      res.json({ body: deleteQuery.rows[0] });
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK");
+      res.status(500).json({ error });
+    }
   }
   async getCart(req, res) {
     const { id_user } = req.params;
