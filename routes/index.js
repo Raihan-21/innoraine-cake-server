@@ -21,7 +21,13 @@ const pool = new Pool({
 });
 // pool.connect();
 
+/**
+ *
+ * ================ Auth Services ====================
+ *
+ */
 router.post("/login", authService.userLogin);
+router.post("/register", authService.register);
 
 router.get("/categories", async (req, res) => {
   try {

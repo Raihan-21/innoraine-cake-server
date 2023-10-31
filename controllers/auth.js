@@ -51,6 +51,20 @@ class Auth {
       res.status(401).send(error.message);
     }
   }
+  async register(req, res) {
+    const { nama, email, no_telp, alamat, password } = req.body;
+    try {
+      const salt = await bcrypt.genSalt();
+      const hashedPw = await bcrypt.hash(password, salt);
+      const queryString =
+        "INSERT INTO users(nama, email, no_telp, alamat, role, password) VALUES($1, $2, $3, $4, $5, $6) RETURNING *";
+      const queryValues = [nama, email, no_telp, alamat, 1, hashedPw];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
 }
 
 const authService = new Auth();
