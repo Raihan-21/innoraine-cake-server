@@ -148,9 +148,11 @@ class UserController {
   async getCartTotalItems(req, res) {
     const { id_user } = req.params;
     try {
-      const queryString = "SELECT COUNT(*) FROM keranjang WHERE id_user = $1";
+      const queryString =
+        "SELECT SUM(jumlah) as total FROM keranjang WHERE id_user = $1";
       const queryValues = [id_user];
       const query = await adminPool.query(queryString, queryValues);
+      console.log(query.rows[0]);
       res.json({ body: query.rows[0] });
     } catch (error) {
       res.status(500).json({ error });
