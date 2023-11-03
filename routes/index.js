@@ -45,8 +45,8 @@ router.get("/categories", async (req, res) => {
  */
 
 router.get("/products", productService.getItems);
-router.get("/products/:id", productService.getDetail);
-router.get("/products/gallery/:id", productService.getProductImages);
+router.get("/products/:slug", productService.getDetail);
+router.get("/products/gallery/:slug", productService.getProductImages);
 
 router.get("/v2/products", productService.supabaseGetItems);
 router.get("/v2/products/:id", productService.getDetail);

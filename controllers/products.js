@@ -58,11 +58,11 @@ class ProductController {
     }
   }
   async getDetail(req, res) {
-    const { id } = req.params;
+    const { slug } = req.params;
     try {
       const queryString =
-        "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.id = $1";
-      const values = [id];
+        "SELECT produk.*, row_to_json(kategori) as kategori from produk JOIN kategori ON produk.id_kategori = kategori.id JOIN gambar_produk ON produk.id = gambar_produk.id_produk WHERE produk.slug = $1";
+      const values = [slug];
       const query = await adminPool.query(queryString, values);
       // console.log(query);
       res.json({ body: query.rows[0] });
@@ -72,9 +72,9 @@ class ProductController {
     }
   }
   async getProductImages(req, res) {
-    const { id } = req.params;
-    const queryString = "SELECT * from gambar_produk WHERE id_produk = $1";
-    const values = [id];
+    const { slug } = req.params;
+    const queryString = "SELECT * from gambar_produk WHERE slug_produk = $1";
+    const values = [slug];
     try {
       const query = await adminPool.query(queryString, values);
       res.json({ body: query.rows });
