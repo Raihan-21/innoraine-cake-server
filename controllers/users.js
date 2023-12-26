@@ -99,7 +99,6 @@ class UserController {
       const queryValues = [productQuery.rows[0].harga, id_produk, id_user];
       const query = await adminPool.query(queryString, queryValues);
       await client.query("COMMIT");
-      console.log(query);
       res.json({ body: query });
     } catch (error) {
       await client.query("ROLLBACK");
@@ -119,10 +118,11 @@ class UserController {
         deleteQueryString,
         deleteQueryValues
       );
-      // const query = await adminPool.query(
-      //   "UPDATE produk SET jumlah = jumlah + $1 WHERE "
-      // );
-      res.json({ body: deleteQuery.rows[0] });
+      const queryString =
+        "UPDATE produk SET jumlah = jumlah + $1 WHERE id = $2 RETURNING *";
+      const queryValues = [deleteQuery.rows[0].jumlah, id];
+      const query = await adminPool.query(queryString, queryValues);
+      res.json({ body: query.rows[0] });
       await client.query("COMMIT");
     } catch (error) {
       await client.query("ROLLBACK");
@@ -148,9 +148,11 @@ class UserController {
   async getCartTotalItems(req, res) {
     const { id_user } = req.params;
     try {
-      const queryString = "SELECT COUNT(*) FROM keranjang WHERE id_user = $1";
+      const queryString =
+        "SELECT SUM(jumlah) as total FROM keranjang WHERE id_user = $1";
       const queryValues = [id_user];
       const query = await adminPool.query(queryString, queryValues);
+      console.log(query.rows[0]);
       res.json({ body: query.rows[0] });
     } catch (error) {
       res.status(500).json({ error });
