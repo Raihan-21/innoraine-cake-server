@@ -22,5 +22,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "concurrently \"nodemon index\" \"cd ../ && cd client && yarn start\" "
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.0"
   }
 }
