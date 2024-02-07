@@ -27,10 +27,12 @@ const orderService = require("../controllers/order");
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const queryString = `SELECT users.*, roles.nama_role as nama_role FROM users JOIN user_roles ON users.id = user_roles.id_user JOIN roles ON roles.id = user_roles.id_role WHERE email= $1 AND roles.id = 2`;
+  const queryString = `SELECT users.*, row_to_json(roles) as role FROM users JOIN roles ON roles.id = users.role WHERE users.email= $1 AND roles.id = 2`;
   const values = [email];
+  console.log(email);
   try {
     const query = await adminPool.query(queryString, values);
+    console.log(query);
     if (!query.rowCount) {
       throw new Error("User admin tidak ditemukan");
     }
