@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "build")));
 app.listen(process.env.PORT || 5000, function () {
   console.log("server running on port 5000");
 });
-
+//
 app.use("/api/admin", cmsRouter);
 app.use("/api", mainRouter);
 // app.use("/api/admin", mainMiddleware, mainRouter);
